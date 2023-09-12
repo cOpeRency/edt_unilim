@@ -1,19 +1,24 @@
 import 'dart:async';
 
+import 'package:edt_unilim/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        home: MyHomePage(),
+  Widget build(BuildContext context) => const MaterialApp(
+        home: SplashScreen(),
         debugShowCheckedModeBanner: false,
       );
 }
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
