@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:edt_unilim/planning.dart';
 import 'package:edt_unilim/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
@@ -16,32 +17,26 @@ void main() => runApp(MaterialApp(
     theme: ThemeData(
       primaryColor: Colors.grey[800],
     ),
-    home: Example()));
+  )
+);
 
-class Example extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
   @override
-  _ExampleState createState() => _ExampleState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _ExampleState extends State<Example> {
+class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static const List<Widget> _widgetOptions = <Widget>[
+    Planning(),
     Text(
-      'Home',
+      'Log_Mag',
       style: optionStyle,
     ),
     Text(
-      'Likes',
-      style: optionStyle,
-    ),
-    Text(
-      'Search',
-      style: optionStyle,
-    ),
-    Text(
-      'Profile',
+      'Paramètres',
       style: optionStyle,
     ),
   ];
@@ -49,11 +44,11 @@ class _ExampleState extends State<Example> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 20,
-        title: const Text('GoogleNavBar'),
+      appBar:AppBar(
+        title: Center(child:Image.asset('assets/images/Logo.png', scale: 10,)),
+        backgroundColor: Colors.white,
       ),
+      backgroundColor: Colors.white,
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -82,16 +77,16 @@ class _ExampleState extends State<Example> {
               color: Colors.black,
               tabs: const [
                 GButton(
-                  icon: LineIcons.home,
-                  text: 'Home',
+                  icon: Icons.table_view_rounded,
+                  text: 'Planning',
                 ),
                 GButton(
-                  icon: LineIcons.heart,
-                  text: 'Likes',
+                  icon: Icons.newspaper_rounded,
+                  text: 'Log_Mag',
                 ),
                 GButton(
-                  icon: LineIcons.search,
-                  text: 'Search',
+                  icon: Icons.settings_rounded,
+                  text: 'Paramètres',
                 ),
               ],
               selectedIndex: _selectedIndex,
