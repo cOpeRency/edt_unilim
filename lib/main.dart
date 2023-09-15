@@ -1,200 +1,103 @@
-library my_app.home_page;
-
 import 'dart:async';
+import 'package:edt_unilim/planning.dart';
 import 'package:edt_unilim/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:line_icons/line_icons.dart';
 
-void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+void main() => runApp(MaterialApp(
+    home: SplashScreen(),
+    debugShowCheckedModeBanner: false,
+    builder: (context, child) {
+      return Directionality(textDirection: TextDirection.ltr, child: child!);
+    },
+    title: 'GNav',
+    theme: ThemeData(
+      primaryColor: Colors.grey[800],
+    ),
+  )
+);
 
+class MyHomePage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) => const MaterialApp(
-        home: SplashScreen(),
-        debugShowCheckedModeBanner: false,
-      );
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
+  static const List<Widget> _widgetOptions = <Widget>[
+    Planning(),
+    Text(
+      'Log_Mag',
+      style: optionStyle,
+    ),
+    Text(
+      'Paramètres',
+      style: optionStyle,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (_) => const PDFViewerFromUrl(
-                  url: 'http://edt-iut-info.unilim.fr/edt/A3/A3_S1.pdf',
+      appBar:AppBar(
+        title: Center(child:Image.asset('assets/images/Logo.png', scale: 10,)),
+        backgroundColor: Colors.white,
+      ),
+      backgroundColor: Colors.white,
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            child: GNav(
+              rippleColor: Colors.grey[300]!,
+              hoverColor: Colors.grey[100]!,
+              gap: 8,
+              activeColor: Colors.black,
+              iconSize: 24,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              duration: Duration(milliseconds: 400),
+              tabBackgroundColor: Colors.grey[100]!,
+              color: Colors.black,
+              tabs: const [
+                GButton(
+                  icon: Icons.table_view_rounded,
+                  text: 'Planning',
                 ),
-              ),
-            ),
-            child: const Text('PDF From Url'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (_) => const PDFViewerCachedFromUrl(
-                  url: 'http://edt-iut-info.unilim.fr/edt/A3/A3_S1.pdf',
+                GButton(
+                  icon: Icons.newspaper_rounded,
+                  text: 'Log_Mag',
                 ),
-              ),
-            ),
-            child: const Text('Cashed PDF From Url'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (_) => PDFViewerFromAsset(
-                  pdfAssetPath: 'assets/pdf/file-example.pdf',
-                ),
-              ),
-            ),
-            child: const Text('PDF From Asset'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class PDFViewerFromUrl extends StatelessWidget {
-  const PDFViewerFromUrl({Key? key, required this.url}) : super(key: key);
-
-  final String url;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('PDF From Url'),
-      ),
-      body: const PDF().fromUrl(
-        url,
-        placeholder: (double progress) => Center(child: Text('$progress %')),
-        errorWidget: (dynamic error) => Center(child: Text(error.toString())),
-      ),
-    );
-  }
-}
-
-class PDFViewerCachedFromUrl extends StatelessWidget {
-  const PDFViewerCachedFromUrl({Key? key, required this.url}) : super(key: key);
-
-  final String url;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cached PDF From Url'),
-      ),
-      body: const PDF().cachedFromUrl(
-        url,
-        placeholder: (double progress) => Center(child: Text('$progress %')),
-        errorWidget: (dynamic error) => Center(child: Text(error.toString())),
-      ),
-    );
-  }
-}
-
-class PDFViewerFromAsset extends StatelessWidget {
-  PDFViewerFromAsset({Key? key, required this.pdfAssetPath}) : super(key: key);
-  final String pdfAssetPath;
-  final Completer<PDFViewController> _pdfViewController =
-      Completer<PDFViewController>();
-  final StreamController<String> _pageCountController =
-      StreamController<String>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('PDF From Asset'),
-        actions: <Widget>[
-          StreamBuilder<String>(
-              stream: _pageCountController.stream,
-              builder: (_, AsyncSnapshot<String> snapshot) {
-                if (snapshot.hasData) {
-                  return Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.blue[900],
-                      ),
-                      child: Text(snapshot.data!),
-                    ),
-                  );
-                }
-                return const SizedBox();
-              }),
-        ],
-      ),
-      body: PDF(
-        enableSwipe: true,
-        swipeHorizontal: true,
-        autoSpacing: false,
-        pageFling: false,
-        onPageChanged: (int? current, int? total) =>
-            _pageCountController.add('${current! + 1} - $total'),
-        onViewCreated: (PDFViewController pdfViewController) async {
-          _pdfViewController.complete(pdfViewController);
-          final int currentPage = await pdfViewController.getCurrentPage() ?? 0;
-          final int? pageCount = await pdfViewController.getPageCount();
-          _pageCountController.add('${currentPage + 1} - $pageCount');
-        },
-      ).fromAsset(
-        pdfAssetPath,
-        errorWidget: (dynamic error) => Center(child: Text(error.toString())),
-      ),
-      floatingActionButton: FutureBuilder<PDFViewController>(
-        future: _pdfViewController.future,
-        builder: (_, AsyncSnapshot<PDFViewController> snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
-            return Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                FloatingActionButton(
-                  heroTag: '-',
-                  child: const Text('-'),
-                  onPressed: () async {
-                    final PDFViewController pdfController = snapshot.data!;
-                    final int currentPage =
-                        (await pdfController.getCurrentPage())! - 1;
-                    if (currentPage >= 0) {
-                      await pdfController.setPage(currentPage);
-                    }
-                  },
-                ),
-                FloatingActionButton(
-                  heroTag: '+',
-                  child: const Text('+'),
-                  onPressed: () async {
-                    final PDFViewController pdfController = snapshot.data!;
-                    final int currentPage =
-                        (await pdfController.getCurrentPage())! + 1;
-                    final int numberOfPages =
-                        await pdfController.getPageCount() ?? 0;
-                    if (numberOfPages > currentPage) {
-                      await pdfController.setPage(currentPage);
-                    }
-                  },
+                GButton(
+                  icon: Icons.settings_rounded,
+                  text: 'Paramètres',
                 ),
               ],
-            );
-          }
-          return const SizedBox();
-        },
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+            ),
+          ),
+        ),
       ),
     );
   }

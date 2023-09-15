@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) =>
-              const MyHomePage(), // Remplacez MainScreen par votre écran principal
+              MyHomePage(), // Remplacez MainScreen par votre écran principal
         ),
       );
     });
