@@ -1,9 +1,14 @@
+import 'dart:async';
+import 'package:edt_unilim/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 
 
 void main() => runApp(MaterialApp(
+    home: SplashScreen(),
+    debugShowCheckedModeBanner: false,
     builder: (context, child) {
       return Directionality(textDirection: TextDirection.ltr, child: child!);
     },
