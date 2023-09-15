@@ -1,5 +1,6 @@
-import 'dart:async';
+library my_app.home_page;
 
+import 'dart:async';
 import 'package:edt_unilim/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
@@ -22,9 +23,6 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('flutter_cached_pdfview Demo'),
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
