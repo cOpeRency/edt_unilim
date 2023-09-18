@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 class Planning extends StatefulWidget {
   const Planning({Key? key}) : super(key: key);
@@ -11,7 +10,7 @@ class Planning extends StatefulWidget {
 }
 
 class _PlanningState extends State<Planning> {
-  int currentIndex = getWeekNumber(DateTime.now()) - 36;
+  int currentIndex = 2;
   int currentYear = 3; // Index de la semaine par défaut (S3)
 
   @override
@@ -111,7 +110,7 @@ class _PlanningState extends State<Planning> {
             AspectRatio(
               aspectRatio: 9 / 9,
               child: PageView.builder(
-                itemCount: getWeekNumber(DateTime.now()) - 35,
+                itemCount: 3,
                 controller: PageController(initialPage: currentIndex),
                 onPageChanged: (index) {
                   setState(() {
