@@ -1,3 +1,4 @@
+import 'package:edt_unilim/log_mag.dart';
 import 'package:edt_unilim/planning.dart';
 import 'package:edt_unilim/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -36,10 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static final List<Widget> _widgetOptions = <Widget>[
     const Planning(),
-    const Text(
-      'Log_Mag',
-      style: optionStyle,
-    ),
+    const LogMag(),
     const Text(
       'Paramètres',
       style: optionStyle,
