@@ -2,8 +2,13 @@ import 'package:edt_unilim/planning.dart';
 import 'package:edt_unilim/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(MaterialApp(
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MaterialApp(
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
       builder: (context, child) {
@@ -14,6 +19,8 @@ void main() => runApp(MaterialApp(
         primaryColor: Colors.grey[800],
       ),
     ));
+  });
+}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});

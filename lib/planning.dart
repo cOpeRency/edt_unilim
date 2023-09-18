@@ -33,7 +33,7 @@ class _PlanningState extends State<Planning> {
                         gradient: const LinearGradient(colors: [
                           Color.fromARGB(255, 9, 88, 207),
                           Color.fromARGB(255, 9, 88, 207),
-                          Colors.white,
+                          Color.fromARGB(255, 99, 155, 239)
                           //add more colors
                         ]),
                         borderRadius: BorderRadius.circular(5),
@@ -81,9 +81,9 @@ class _PlanningState extends State<Planning> {
                     height: 50,
                     decoration: BoxDecoration(
                         gradient: const LinearGradient(colors: [
-                          Colors.white,
+                          Color.fromARGB(255, 99, 155, 239),
                           Color.fromARGB(255, 9, 88, 207),
-                          Color.fromARGB(255, 9, 88, 207),
+                          Color.fromARGB(255, 9, 88, 207)
                           //add more colors
                         ]),
                         borderRadius: BorderRadius.circular(5),
