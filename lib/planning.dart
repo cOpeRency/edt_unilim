@@ -1,188 +1,173 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
+class Planning extends StatefulWidget {
+  const Planning({Key? key}) : super(key: key);
 
-class Planning extends StatelessWidget {
-  const Planning({super.key});
+  @override
+  // ignore: library_private_types_in_public_api
+  _PlanningState createState() => _PlanningState();
+}
+
+class _PlanningState extends State<Planning> {
+  int currentIndex = 2;
+  int currentYear = 3; // Index de la semaine par défaut (S3)
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (_) => const PDFViewerFromUrl(
-                  url: 'http://edt-iut-info.unilim.fr/edt/A3/A3_S1.pdf',
-                ),
+      backgroundColor: const Color.fromARGB(255, 242, 242, 242),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    width: 175,
+                    decoration: BoxDecoration(
+                        gradient: const LinearGradient(colors: [
+                          Color.fromARGB(255, 9, 88, 207),
+                          Color.fromARGB(255, 9, 88, 207),
+                          Colors.white,
+                          //add more colors
+                        ]),
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: const <BoxShadow>[
+                          BoxShadow(
+                              color: Color.fromRGBO(
+                                  0, 0, 0, 0.57), //shadow for button
+                              blurRadius: 5) //blur radius of shadow
+                        ]),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      child: DropdownButton(
+                        value: currentYear,
+                        items: const [
+                          DropdownMenuItem(
+                            value: 1,
+                            child: Text('A1'),
+                          ),
+                          DropdownMenuItem(
+                            value: 2,
+                            child: Text('A2'),
+                          ),
+                          DropdownMenuItem(
+                            value: 3,
+                            child: Text('A3'),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            currentYear = value as int;
+                          });
+                        },
+                        isExpanded:
+                            true, //make true to take width of parent widget
+                        underline: Container(), //empty line
+                        style:
+                            const TextStyle(fontSize: 18, color: Colors.white),
+                        dropdownColor: const Color.fromARGB(255, 9, 88, 207),
+                        iconEnabledColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 175,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        gradient: const LinearGradient(colors: [
+                          Colors.white,
+                          Color.fromARGB(255, 9, 88, 207),
+                          Color.fromARGB(255, 9, 88, 207),
+                          //add more colors
+                        ]),
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: const <BoxShadow>[
+                          BoxShadow(
+                              color: Color.fromRGBO(
+                                  0, 0, 0, 0.57), //shadow for button
+                              blurRadius: 5) //blur radius of shadow
+                        ]),
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 30, right: 30, top: 12),
+                      child: Text(
+                        'Semaine ${currentIndex + 1}',
+                        style:
+                            const TextStyle(fontSize: 18, color: Colors.white),
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: const Text('PDF From Url'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (_) => const PDFViewerCachedFromUrl(
-                  url: 'http://edt-iut-info.unilim.fr/edt/A3/A3_S1.pdf',
-                ),
+            AspectRatio(
+              aspectRatio: 9 / 9,
+              child: PageView.builder(
+                itemCount: 3,
+                controller: PageController(initialPage: currentIndex),
+                onPageChanged: (index) {
+                  setState(() {
+                    currentIndex = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  return FutureBuilder<Widget>(
+                    future: getPdf(index, currentYear),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return snapshot.data ??
+                            Container(); // Affiche le PDF s'il est disponible
+                      } else {
+                        return const CircularProgressIndicator(); // Affiche un indicateur de chargement en attendant
+                      }
+                    },
+                  );
+                },
               ),
             ),
-            child: const Text('Cashed PDF From Url'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (_) => PDFViewerFromAsset(
-                  pdfAssetPath: 'assets/pdf/file-example.pdf',
-                ),
-              ),
-            ),
-            child: const Text('PDF From Asset'),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
 class PDFViewerFromUrl extends StatelessWidget {
-  const PDFViewerFromUrl({Key? key, required this.url}) : super(key: key);
+  const PDFViewerFromUrl({Key? key, required this.pdfUrl}) : super(key: key);
 
-  final String url;
+  final String pdfUrl;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('PDF From Url'),
-      ),
-      body: const PDF().fromUrl(
-        url,
-        placeholder: (double progress) => Center(child: Text('$progress %')),
-        errorWidget: (dynamic error) => Center(child: Text(error.toString())),
-      ),
+    return const PDF(
+      enableSwipe: true,
+      swipeHorizontal: true,
+      fitPolicy: FitPolicy.BOTH,
+    ).cachedFromUrl(
+      pdfUrl,
+      placeholder: (double progress) => Center(child: Text('$progress %')),
+      errorWidget: (dynamic error) => Center(child: Text(error.toString())),
     );
   }
 }
 
-class PDFViewerCachedFromUrl extends StatelessWidget {
-  const PDFViewerCachedFromUrl({Key? key, required this.url}) : super(key: key);
-
-  final String url;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cached PDF From Url'),
-      ),
-      body: const PDF().cachedFromUrl(
-        url,
-        placeholder: (double progress) => Center(child: Text('$progress %')),
-        errorWidget: (dynamic error) => Center(child: Text(error.toString())),
-      ),
-    );
-  }
+Future<Widget> getPdf(index, currentYear) async {
+  return Center(
+    child: PDFViewerFromUrl(
+      pdfUrl:
+          'http://edt-iut-info.unilim.fr/edt/A$currentYear/A${currentYear}_S${index + 1}.pdf',
+    ),
+  );
 }
 
-class PDFViewerFromAsset extends StatelessWidget {
-  PDFViewerFromAsset({Key? key, required this.pdfAssetPath}) : super(key: key);
-  final String pdfAssetPath;
-  final Completer<PDFViewController> _pdfViewController =
-      Completer<PDFViewController>();
-  final StreamController<String> _pageCountController =
-      StreamController<String>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('PDF From Asset'),
-        actions: <Widget>[
-          StreamBuilder<String>(
-              stream: _pageCountController.stream,
-              builder: (_, AsyncSnapshot<String> snapshot) {
-                if (snapshot.hasData) {
-                  return Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.blue[900],
-                      ),
-                      child: Text(snapshot.data!),
-                    ),
-                  );
-                }
-                return const SizedBox();
-              }),
-        ],
-      ),
-      body: PDF(
-        enableSwipe: true,
-        swipeHorizontal: true,
-        autoSpacing: false,
-        pageFling: false,
-        onPageChanged: (int? current, int? total) =>
-            _pageCountController.add('${current! + 1} - $total'),
-        onViewCreated: (PDFViewController pdfViewController) async {
-          _pdfViewController.complete(pdfViewController);
-          final int currentPage = await pdfViewController.getCurrentPage() ?? 0;
-          final int? pageCount = await pdfViewController.getPageCount();
-          _pageCountController.add('${currentPage + 1} - $pageCount');
-        },
-      ).fromAsset(
-        pdfAssetPath,
-        errorWidget: (dynamic error) => Center(child: Text(error.toString())),
-      ),
-      floatingActionButton: FutureBuilder<PDFViewController>(
-        future: _pdfViewController.future,
-        builder: (_, AsyncSnapshot<PDFViewController> snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
-            return Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                FloatingActionButton(
-                  heroTag: '-',
-                  child: const Text('-'),
-                  onPressed: () async {
-                    final PDFViewController pdfController = snapshot.data!;
-                    final int currentPage =
-                        (await pdfController.getCurrentPage())! - 1;
-                    if (currentPage >= 0) {
-                      await pdfController.setPage(currentPage);
-                    }
-                  },
-                ),
-                FloatingActionButton(
-                  heroTag: '+',
-                  child: const Text('+'),
-                  onPressed: () async {
-                    final PDFViewController pdfController = snapshot.data!;
-                    final int currentPage =
-                        (await pdfController.getCurrentPage())! + 1;
-                    final int numberOfPages =
-                        await pdfController.getPageCount() ?? 0;
-                    if (numberOfPages > currentPage) {
-                      await pdfController.setPage(currentPage);
-                    }
-                  },
-                ),
-              ],
-            );
-          }
-          return const SizedBox();
-        },
-      ),
-    );
-  }
+getWeekNumber(DateTime date) {
+  final oneJan = DateTime(date.year, 1, 1);
+  return ((date.difference(oneJan).inDays + oneJan.weekday) / 7).ceil();
 }
