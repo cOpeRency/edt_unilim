@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:http/http.dart' as http;
 
 class Planning extends StatefulWidget {
   const Planning({Key? key}) : super(key: key);
@@ -10,8 +11,8 @@ class Planning extends StatefulWidget {
 }
 
 class _PlanningState extends State<Planning> {
-  int currentIndex = 2;
-  int currentYear = 3; // Index de la semaine par défaut (S3)
+  int currentIndex = getWeekNumber(DateTime.now()) - 37;
+  int currentYear = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class _PlanningState extends State<Planning> {
                           Color.fromARGB(255, 99, 155, 239)
                           //add more colors
                         ]),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(50),
                         boxShadow: const <BoxShadow>[
                           BoxShadow(
                               color: Color.fromRGBO(
@@ -86,7 +87,7 @@ class _PlanningState extends State<Planning> {
                           Color.fromARGB(255, 9, 88, 207)
                           //add more colors
                         ]),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(50),
                         boxShadow: const <BoxShadow>[
                           BoxShadow(
                               color: Color.fromRGBO(
@@ -110,7 +111,7 @@ class _PlanningState extends State<Planning> {
             AspectRatio(
               aspectRatio: 9 / 9,
               child: PageView.builder(
-                itemCount: 3,
+                itemCount: getWeekNumber(DateTime.now()) - 35,
                 controller: PageController(initialPage: currentIndex),
                 onPageChanged: (index) {
                   setState(() {
@@ -118,15 +119,11 @@ class _PlanningState extends State<Planning> {
                   });
                 },
                 itemBuilder: (context, index) {
-                  return FutureBuilder<Widget>(
+                  final Key pageKey = UniqueKey();
+                  return FutureBuilder<Widget?>(
                     future: getPdf(index, currentYear),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return snapshot.data ??
-                            Container(); // Affiche le PDF s'il est disponible
-                      } else {
-                        return const CircularProgressIndicator(); // Affiche un indicateur de chargement en attendant
-                      }
+                      return Center(key: pageKey, child: snapshot.data);
                     },
                   );
                 },
@@ -146,7 +143,7 @@ class PDFViewerFromUrl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PDF(
+    var pdf = const PDF(
       enableSwipe: true,
       swipeHorizontal: true,
       fitPolicy: FitPolicy.BOTH,
@@ -155,16 +152,27 @@ class PDFViewerFromUrl extends StatelessWidget {
       placeholder: (double progress) => Center(child: Text('$progress %')),
       errorWidget: (dynamic error) => Center(child: Text(error.toString())),
     );
+    return pdf;
   }
 }
 
-Future<Widget> getPdf(index, currentYear) async {
-  return Center(
-    child: PDFViewerFromUrl(
-      pdfUrl:
-          'http://edt-iut-info.unilim.fr/edt/A$currentYear/A${currentYear}_S${index + 1}.pdf',
-    ),
-  );
+Future<Widget?> getPdf(index, currentYear) async {
+  final pdfUrl =
+      'http://edt-iut-info.unilim.fr/edt/A$currentYear/A${currentYear}_S${index + 1}.pdf';
+
+  try {
+    final response = await http.head(Uri.parse(pdfUrl));
+    if (response.statusCode == 200) {
+      // L'URL existe, récupérez le PDF
+      final pdfView = PDFViewerFromUrl(pdfUrl: pdfUrl);
+      return pdfView;
+    } else {
+      // L'URL n'existe pas, vous pouvez retourner un widget d'erreur ou null
+      return const Text("PDF introuvable");
+    }
+  } catch (e) {
+    return const Text("Erreur lors de la vérification de l'URL");
+  }
 }
 
 getWeekNumber(DateTime date) {
