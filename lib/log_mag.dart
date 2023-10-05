@@ -80,8 +80,8 @@ class PDFViewerFromAsset extends StatelessWidget {
               children: <Widget>[
                 FloatingActionButton(
                   backgroundColor: const Color.fromARGB(255, 9, 88, 207),
-                  heroTag: '-',
-                  child: const Text('-'),
+                  heroTag: '<',
+                  child: const Text('<'),
                   onPressed: () async {
                     final PDFViewController pdfController = snapshot.data!;
                     final int currentPage =
@@ -92,9 +92,9 @@ class PDFViewerFromAsset extends StatelessWidget {
                   },
                 ),
                 FloatingActionButton(
-                  heroTag: '+',
+                  heroTag: '>',
                   backgroundColor: const Color.fromARGB(255, 9, 88, 207),
-                  child: const Text('+'),
+                  child: const Text('>'),
                   onPressed: () async {
                     final PDFViewController pdfController = snapshot.data!;
                     final int currentPage =

@@ -1,5 +1,6 @@
+import 'package:edt_unilim/planning2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+
 
 class Planning extends StatefulWidget {
   const Planning({Key? key}) : super(key: key);
@@ -10,8 +11,8 @@ class Planning extends StatefulWidget {
 }
 
 class _PlanningState extends State<Planning> {
-  int currentIndex = 2;
-  int currentYear = 3; // Index de la semaine par défaut (S3)
+  ValueNotifier<int> currentIndex = ValueNotifier<int>(getWeekNumber(DateTime.now()) - 37);
+  ValueNotifier<int> currentYear = ValueNotifier<int>(3);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class _PlanningState extends State<Planning> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 10, top : 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -36,7 +37,7 @@ class _PlanningState extends State<Planning> {
                           Color.fromARGB(255, 99, 155, 239)
                           //add more colors
                         ]),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(50),
                         boxShadow: const <BoxShadow>[
                           BoxShadow(
                               color: Color.fromRGBO(
@@ -46,7 +47,7 @@ class _PlanningState extends State<Planning> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 30, right: 30),
                       child: DropdownButton(
-                        value: currentYear,
+                        value: currentYear.value,
                         items: const [
                           DropdownMenuItem(
                             value: 1,
@@ -63,7 +64,7 @@ class _PlanningState extends State<Planning> {
                         ],
                         onChanged: (value) {
                           setState(() {
-                            currentYear = value as int;
+                            currentYear.value = value as int;
                           });
                         },
                         isExpanded:
@@ -86,7 +87,7 @@ class _PlanningState extends State<Planning> {
                           Color.fromARGB(255, 9, 88, 207)
                           //add more colors
                         ]),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(50),
                         boxShadow: const <BoxShadow>[
                           BoxShadow(
                               color: Color.fromRGBO(
@@ -97,7 +98,7 @@ class _PlanningState extends State<Planning> {
                       padding:
                           const EdgeInsets.only(left: 30, right: 30, top: 12),
                       child: Text(
-                        'Semaine ${currentIndex + 1}',
+                        'Semaine ${currentIndex.value + 1}',
                         style:
                             const TextStyle(fontSize: 18, color: Colors.white),
                         textAlign: TextAlign.right,
@@ -107,31 +108,13 @@ class _PlanningState extends State<Planning> {
                 ],
               ),
             ),
-            AspectRatio(
-              aspectRatio: 9 / 9,
-              child: PageView.builder(
-                itemCount: 3,
-                controller: PageController(initialPage: currentIndex),
-                onPageChanged: (index) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  return FutureBuilder<Widget>(
-                    future: getPdf(index, currentYear),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return snapshot.data ??
-                            Container(); // Affiche le PDF s'il est disponible
-                      } else {
-                        return const CircularProgressIndicator(); // Affiche un indicateur de chargement en attendant
-                      }
-                    },
-                  );
-                },
-              ),
-            ),
+            
+            ValueListenableBuilder<int>(
+              builder: (BuildContext context, int value, Widget? child) {
+                return Expanded(child: PlanningView(url:'http://edt-iut-info.unilim.fr/edt/A${currentYear.value}/A${currentYear.value}_S${currentIndex.value}.pdf'));
+              },
+              valueListenable: currentYear,
+            )
           ],
         ),
       ),
@@ -139,35 +122,8 @@ class _PlanningState extends State<Planning> {
   }
 }
 
-class PDFViewerFromUrl extends StatelessWidget {
-  const PDFViewerFromUrl({Key? key, required this.pdfUrl}) : super(key: key);
-
-  final String pdfUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    return const PDF(
-      enableSwipe: true,
-      swipeHorizontal: true,
-      fitPolicy: FitPolicy.BOTH,
-    ).cachedFromUrl(
-      pdfUrl,
-      placeholder: (double progress) => Center(child: Text('$progress %')),
-      errorWidget: (dynamic error) => Center(child: Text(error.toString())),
-    );
-  }
-}
-
-Future<Widget> getPdf(index, currentYear) async {
-  return Center(
-    child: PDFViewerFromUrl(
-      pdfUrl:
-          'http://edt-iut-info.unilim.fr/edt/A$currentYear/A${currentYear}_S${index + 1}.pdf',
-    ),
-  );
-}
-
 getWeekNumber(DateTime date) {
   final oneJan = DateTime(date.year, 1, 1);
   return ((date.difference(oneJan).inDays + oneJan.weekday) / 7).ceil();
 }
+
