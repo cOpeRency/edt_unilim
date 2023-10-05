@@ -27,88 +27,50 @@ class PDFViewerFromAsset extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 9, 88, 207),
-        title: const Text('Sens dessus-dessous'),
-        actions: <Widget>[
-          StreamBuilder<String>(
-              stream: _pageCountController.stream,
-              builder: (_, AsyncSnapshot<String> snapshot) {
-                if (snapshot.hasData) {
-                  return Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color.fromARGB(255, 0, 36, 89),
-                      ),
-                      child: Text(snapshot.data!),
-                    ),
-                  );
-                }
-                return const SizedBox();
-              }),
-        ],
-      ),
-      body: PDF(
-        enableSwipe: true,
-        swipeHorizontal: true,
-        autoSpacing: false,
-        pageFling: false,
-        onPageChanged: (int? current, int? total) =>
-            _pageCountController.add('${current! + 1} - $total'),
-        onViewCreated: (PDFViewController pdfViewController) async {
-          _pdfViewController.complete(pdfViewController);
-          final int currentPage = await pdfViewController.getCurrentPage() ?? 0;
-          final int? pageCount = await pdfViewController.getPageCount();
-          _pageCountController.add('${currentPage + 1} - $pageCount');
-        },
-      ).fromAsset(
-        pdfAssetPath,
-        errorWidget: (dynamic error) => Center(child: Text(error.toString())),
-      ),
-      floatingActionButton: FutureBuilder<PDFViewController>(
-        future: _pdfViewController.future,
-        builder: (_, AsyncSnapshot<PDFViewController> snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
-            return Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                FloatingActionButton(
-                  backgroundColor: const Color.fromARGB(255, 9, 88, 207),
-                  heroTag: '<',
-                  child: const Text('<'),
-                  onPressed: () async {
-                    final PDFViewController pdfController = snapshot.data!;
-                    final int currentPage =
-                        (await pdfController.getCurrentPage())! - 1;
-                    if (currentPage >= 0) {
-                      await pdfController.setPage(currentPage);
-                    }
-                  },
-                ),
-                FloatingActionButton(
-                  heroTag: '>',
-                  backgroundColor: const Color.fromARGB(255, 9, 88, 207),
-                  child: const Text('>'),
-                  onPressed: () async {
-                    final PDFViewController pdfController = snapshot.data!;
-                    final int currentPage =
-                        (await pdfController.getCurrentPage())! + 1;
-                    final int numberOfPages =
-                        await pdfController.getPageCount() ?? 0;
-                    if (numberOfPages > currentPage) {
-                      await pdfController.setPage(currentPage);
-                    }
-                  },
+        body: Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Column(
+              children: [
+                StreamBuilder<String>(
+                    stream: _pageCountController.stream,
+                    builder: (_, AsyncSnapshot<String> snapshot) {
+                      if (snapshot.hasData) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 30),
+                            child: Text(snapshot.data!,
+                                style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color.fromARGB(255, 80, 121, 196))),
+                          ),
+                        );
+                      }
+                      return const SizedBox();
+                    }),
+                AspectRatio(
+                  aspectRatio: 9 / 11.2,
+                  child: PDF(
+                    enableSwipe: true,
+                    swipeHorizontal: true,
+                    onPageChanged: (int? current, int? total) =>
+                        _pageCountController.add('${current! + 1} - $total'),
+                    onViewCreated: (PDFViewController pdfViewController) async {
+                      _pdfViewController.complete(pdfViewController);
+                      final int currentPage =
+                          await pdfViewController.getCurrentPage() ?? 0;
+                      final int? pageCount =
+                          await pdfViewController.getPageCount();
+                      _pageCountController
+                          .add('${currentPage + 1} - $pageCount');
+                    },
+                  ).fromAsset(
+                    pdfAssetPath,
+                    errorWidget: (dynamic error) =>
+                        Center(child: Text(error.toString())),
+                  ),
                 ),
               ],
-            );
-          }
-          return const SizedBox();
-        },
-      ),
-    );
+            )));
   }
 }

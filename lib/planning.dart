@@ -26,12 +26,13 @@ class _PlanningState extends State<Planning> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 50),
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height / 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
-                    width: 175,
+                    width: MediaQuery.of(context).size.width / 2.5,
                     decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 255, 255, 255),
                         borderRadius: BorderRadius.circular(50),
@@ -77,7 +78,7 @@ class _PlanningState extends State<Planning> {
                     ),
                   ),
                   Container(
-                    width: 175,
+                    width: MediaQuery.of(context).size.width / 2.5,
                     height: 50,
                     decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 255, 255, 255),
@@ -110,7 +111,7 @@ class _PlanningState extends State<Planning> {
               doubleTapScale:
                   2.0, // La valeur de zoom lorsqu'un double-clic est effectué
               duration: const Duration(
-                  milliseconds: 200), // Durée de l'animation de zoom
+                  milliseconds: 100), // Durée de l'animation de zoom
               child: AspectRatio(
                 aspectRatio: 12.5 / 8.8,
                 child: PageView.builder(

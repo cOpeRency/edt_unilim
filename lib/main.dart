@@ -58,35 +58,40 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+        title: Stack(
           children: [
-            Image.asset(
-              'assets/images/Logo.png',
-              scale: 10,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    AdaptiveTheme.of(context).mode.isDark
+                        ? AdaptiveTheme.of(context).setLight()
+                        : AdaptiveTheme.of(context).setDark();
+                  },
+                  child: Text(
+                    "Mode Sombre",
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: AdaptiveTheme.of(context).mode.isDark
+                          ? Colors.white
+                          : const Color.fromARGB(255, 80, 121, 196),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/Logo.png',
+                  scale: 9,
+                ),
+              ],
             ),
           ],
         ),
-        actions: [
-          const Padding(padding: EdgeInsets.only(right: 20)),
-          Padding(
-            padding:
-                const EdgeInsets.only(right: 10), // Ajout de la marge de droite
-            child: ElevatedButton(
-              onPressed: () {
-                AdaptiveTheme.of(context).toggleThemeMode();
-              },
-              child: Text(
-                "Dark Mode",
-                style: TextStyle(
-                  color: AdaptiveTheme.of(context).mode.isDark
-                      ? Colors.white
-                      : const Color.fromARGB(255, 80, 121, 196),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -95,25 +100,29 @@ class _MyHomePageState extends State<MyHomePage> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              blurRadius: 20,
-              color: Colors.black.withOpacity(.1),
+              blurRadius: 30,
+              color: const Color.fromARGB(255, 0, 0, 0).withOpacity(.1),
             )
           ],
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 60.0, vertical: 8),
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 10,
+                vertical: 8),
             child: GNav(
               gap: 8,
               activeColor: const Color.fromARGB(255, 80, 121, 196),
               iconSize: 24,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width / 20,
+                  vertical: 12),
               duration: const Duration(milliseconds: 400),
-              tabBackgroundColor: Colors.grey[100]!,
+              tabBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
               tabs: const [
                 GButton(
                   icon: Icons.table_view_rounded,
-                  text: 'Planning',
+                  text: 'Emploi du temps',
                 ),
                 GButton(
                   icon: Icons.newspaper_rounded,
