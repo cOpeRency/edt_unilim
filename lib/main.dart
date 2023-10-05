@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter/services.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:edt_unilim/log_mag.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,14 +49,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static final List<Widget> _widgetOptions = <Widget>[
     const Planning(),
-    const Text(
-      'Log_Mag',
-      style: optionStyle,
-    ),
+    const LogMag(),
   ];
 
   @override
