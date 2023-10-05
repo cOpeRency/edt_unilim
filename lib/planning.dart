@@ -19,32 +19,25 @@ class _PlanningState extends State<Planning> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 242, 242, 242),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 50),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
                     width: 175,
                     decoration: BoxDecoration(
-                        gradient: const LinearGradient(colors: [
-                          Color.fromARGB(255, 9, 88, 207),
-                          Color.fromARGB(255, 9, 88, 207),
-                          Color.fromARGB(255, 99, 155, 239)
-                          //add more colors
-                        ]),
+                        color: const Color.fromARGB(255, 255, 255, 255),
                         borderRadius: BorderRadius.circular(50),
                         boxShadow: const <BoxShadow>[
                           BoxShadow(
-                              color: Color.fromRGBO(
-                                  0, 0, 0, 0.57), //shadow for button
-                              blurRadius: 5) //blur radius of shadow
+                              color: Color.fromRGBO(0, 0, 0, 0.57),
+                              blurRadius: 5)
                         ]),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 30, right: 30),
@@ -72,10 +65,11 @@ class _PlanningState extends State<Planning> {
                         isExpanded:
                             true, //make true to take width of parent widget
                         underline: Container(), //empty line
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.white),
-                        dropdownColor: const Color.fromARGB(255, 9, 88, 207),
-                        iconEnabledColor: Colors.white,
+                        style: const TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 80, 121, 196)),
+                        dropdownColor: const Color.fromARGB(255, 255, 255, 255),
+                        iconEnabledColor: Colors.black,
                       ),
                     ),
                   ),
@@ -83,12 +77,7 @@ class _PlanningState extends State<Planning> {
                     width: 175,
                     height: 50,
                     decoration: BoxDecoration(
-                        gradient: const LinearGradient(colors: [
-                          Color.fromARGB(255, 99, 155, 239),
-                          Color.fromARGB(255, 9, 88, 207),
-                          Color.fromARGB(255, 9, 88, 207)
-                          //add more colors
-                        ]),
+                        color: const Color.fromARGB(255, 255, 255, 255),
                         borderRadius: BorderRadius.circular(50),
                         boxShadow: const <BoxShadow>[
                           BoxShadow(
@@ -101,8 +90,9 @@ class _PlanningState extends State<Planning> {
                           const EdgeInsets.only(left: 30, right: 30, top: 12),
                       child: Text(
                         'Semaine ${currentIndex + 1}',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.white),
+                        style: const TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 80, 121, 196)),
                         textAlign: TextAlign.right,
                       ),
                     ),
@@ -118,7 +108,7 @@ class _PlanningState extends State<Planning> {
               duration: const Duration(
                   milliseconds: 200), // Durée de l'animation de zoom
               child: AspectRatio(
-                aspectRatio: 9 / 9,
+                aspectRatio: 12.5 / 8.8,
                 child: PageView.builder(
                   itemCount: getWeekNumber(DateTime.now()) - 35,
                   controller: PageController(initialPage: currentIndex),
@@ -159,10 +149,8 @@ class PDFViewerFromUrl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const PDF(
-      enableSwipe: true,
-      swipeHorizontal: true,
-      fitPolicy: FitPolicy.BOTH,
-    ).cachedFromUrl(
+            enableSwipe: true, swipeHorizontal: true, fitPolicy: FitPolicy.BOTH)
+        .cachedFromUrl(
       pdfUrl,
       placeholder: (double progress) => Center(child: Text('$progress %')),
       errorWidget: (dynamic error) => Center(child: Text(error.toString())),

@@ -3,23 +3,39 @@ import 'package:edt_unilim/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter/services.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(MaterialApp(
-      home: const SplashScreen(),
-      debugShowCheckedModeBanner: false,
-      builder: (context, child) {
-        return Directionality(textDirection: TextDirection.ltr, child: child!);
-      },
-      title: 'GNav',
-      theme: ThemeData(
-        primaryColor: Colors.grey[800],
-      ),
-    ));
+    runApp(const MyApp());
   });
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AdaptiveTheme(
+      light: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.blue,
+      ),
+      dark: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.blue,
+      ),
+      initial: AdaptiveThemeMode.light,
+      builder: (theme, darkTheme) => MaterialApp(
+        title: "Adaptive Theme",
+        theme: theme,
+        darkTheme: darkTheme,
+        home: const SplashScreen(),
+      ),
+    );
+  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -40,30 +56,46 @@ class _MyHomePageState extends State<MyHomePage> {
       'Log_Mag',
       style: optionStyle,
     ),
-    const Text(
-      'Paramètres',
-      style: optionStyle,
-    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-            child: Image.asset(
-          'assets/images/Logo.png',
-          scale: 10,
-        )),
-        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Image.asset(
+              'assets/images/Logo.png',
+              scale: 10,
+            ),
+          ],
+        ),
+        actions: [
+          const Padding(padding: EdgeInsets.only(right: 20)),
+          Padding(
+            padding:
+                const EdgeInsets.only(right: 10), // Ajout de la marge de droite
+            child: ElevatedButton(
+              onPressed: () {
+                AdaptiveTheme.of(context).toggleThemeMode();
+              },
+              child: const Text(
+                "Dark Mode",
+                style: TextStyle(
+                  color: Color.fromARGB(
+                      255, 80, 121, 196), // Couleur du texte en bleu
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
-      backgroundColor: Colors.white,
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
           boxShadow: [
             BoxShadow(
               blurRadius: 20,
@@ -73,17 +105,14 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 60.0, vertical: 8),
             child: GNav(
-              rippleColor: Colors.grey[300]!,
-              hoverColor: Colors.grey[100]!,
               gap: 8,
-              activeColor: Colors.black,
+              activeColor: const Color.fromARGB(255, 80, 121, 196),
               iconSize: 24,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               duration: const Duration(milliseconds: 400),
               tabBackgroundColor: Colors.grey[100]!,
-              color: Colors.black,
               tabs: const [
                 GButton(
                   icon: Icons.table_view_rounded,
@@ -92,10 +121,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 GButton(
                   icon: Icons.newspaper_rounded,
                   text: 'Log_Mag',
-                ),
-                GButton(
-                  icon: Icons.settings_rounded,
-                  text: 'Paramètres',
                 ),
               ],
               selectedIndex: _selectedIndex,

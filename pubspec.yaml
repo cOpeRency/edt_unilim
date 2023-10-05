@@ -45,6 +45,7 @@ dependencies:
   line_icons: ^2.0.3
   flutter_calendar_week: ^3.0.0
   gesture_zoom_box: ^0.0.4
+  adaptive_theme: ^3.4.1
 
 dev_dependencies:
   flutter_test:
