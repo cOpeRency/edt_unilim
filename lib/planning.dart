@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:gesture_zoom_box/gesture_zoom_box.dart';
 
 class Planning extends StatefulWidget {
   const Planning({Key? key}) : super(key: key);
@@ -10,8 +13,8 @@ class Planning extends StatefulWidget {
 }
 
 class _PlanningState extends State<Planning> {
-  int currentIndex = 2;
-  int currentYear = 3; // Index de la semaine par défaut (S3)
+  int currentIndex = getWeekNumber(DateTime.now()) - 37;
+  int currentYear = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,7 @@ class _PlanningState extends State<Planning> {
                           Color.fromARGB(255, 99, 155, 239)
                           //add more colors
                         ]),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(50),
                         boxShadow: const <BoxShadow>[
                           BoxShadow(
                               color: Color.fromRGBO(
@@ -86,7 +89,7 @@ class _PlanningState extends State<Planning> {
                           Color.fromARGB(255, 9, 88, 207)
                           //add more colors
                         ]),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(50),
                         boxShadow: const <BoxShadow>[
                           BoxShadow(
                               color: Color.fromRGBO(
@@ -107,31 +110,40 @@ class _PlanningState extends State<Planning> {
                 ],
               ),
             ),
-            AspectRatio(
-              aspectRatio: 9 / 9,
-              child: PageView.builder(
-                itemCount: 3,
-                controller: PageController(initialPage: currentIndex),
-                onPageChanged: (index) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  return FutureBuilder<Widget>(
-                    future: getPdf(index, currentYear),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return snapshot.data ??
-                            Container(); // Affiche le PDF s'il est disponible
-                      } else {
-                        return const CircularProgressIndicator(); // Affiche un indicateur de chargement en attendant
-                      }
-                    },
-                  );
-                },
+            GestureZoomBox(
+              maxScale:
+                  5.0, // La valeur maximale de zoom que vous souhaitez autoriser
+              doubleTapScale:
+                  2.0, // La valeur de zoom lorsqu'un double-clic est effectué
+              duration: const Duration(
+                  milliseconds: 200), // Durée de l'animation de zoom
+              child: AspectRatio(
+                aspectRatio: 9 / 9,
+                child: PageView.builder(
+                  itemCount: getWeekNumber(DateTime.now()) - 35,
+                  controller: PageController(initialPage: currentIndex),
+                  onPageChanged: (index) {
+                    setState(() {
+                      currentIndex = index;
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    return FutureBuilder<Widget>(
+                      future: getPdf(index, currentYear),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return snapshot.data ?? Container();
+                        } else {
+                          return const Center(
+                            child: Text("PDF non disponible"),
+                          );
+                        }
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),
