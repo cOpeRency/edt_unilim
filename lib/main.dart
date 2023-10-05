@@ -80,11 +80,12 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 AdaptiveTheme.of(context).toggleThemeMode();
               },
-              child: const Text(
+              child: Text(
                 "Dark Mode",
                 style: TextStyle(
-                  color: Color.fromARGB(
-                      255, 80, 121, 196), // Couleur du texte en bleu
+                  color: AdaptiveTheme.of(context).mode.isDark
+                      ? Colors.white
+                      : const Color.fromARGB(255, 80, 121, 196),
                 ),
               ),
             ),

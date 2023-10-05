@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:gesture_zoom_box/gesture_zoom_box.dart';
@@ -34,9 +35,11 @@ class _PlanningState extends State<Planning> {
                     decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 255, 255, 255),
                         borderRadius: BorderRadius.circular(50),
-                        boxShadow: const <BoxShadow>[
+                        boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color: Color.fromRGBO(0, 0, 0, 0.57),
+                              color: AdaptiveTheme.of(context).mode.isDark
+                                  ? const Color.fromRGBO(255, 255, 255, 0.57)
+                                  : const Color.fromRGBO(0, 0, 0, 0.57),
                               blurRadius: 5)
                         ]),
                     child: Padding(
@@ -79,11 +82,12 @@ class _PlanningState extends State<Planning> {
                     decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 255, 255, 255),
                         borderRadius: BorderRadius.circular(50),
-                        boxShadow: const <BoxShadow>[
+                        boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color: Color.fromRGBO(
-                                  0, 0, 0, 0.57), //shadow for button
-                              blurRadius: 5) //blur radius of shadow
+                              color: AdaptiveTheme.of(context).mode.isDark
+                                  ? const Color.fromRGBO(255, 255, 255, 0.57)
+                                  : const Color.fromRGBO(0, 0, 0, 0.57),
+                              blurRadius: 5)
                         ]),
                     child: Padding(
                       padding:
@@ -102,7 +106,7 @@ class _PlanningState extends State<Planning> {
             ),
             GestureZoomBox(
               maxScale:
-                  5.0, // La valeur maximale de zoom que vous souhaitez autoriser
+                  3.0, // La valeur maximale de zoom que vous souhaitez autoriser
               doubleTapScale:
                   2.0, // La valeur de zoom lorsqu'un double-clic est effectué
               duration: const Duration(
