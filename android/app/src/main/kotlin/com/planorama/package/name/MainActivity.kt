@@ -1,4 +1,4 @@
-package com.example.edt_unilim
+package com.planorama.package.name
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -115,7 +115,7 @@ class _PlanningState extends State<Planning> {
               child: AspectRatio(
                 aspectRatio: 12.5 / 8.8,
                 child: PageView.builder(
-                  itemCount: getWeekNumber(DateTime.now()) - 35,
+                  itemCount: getWeekNumber(DateTime.now()) - 36,
                   controller: PageController(initialPage: currentIndex),
                   onPageChanged: (index) {
                     setState(() {
@@ -158,7 +158,8 @@ class PDFViewerFromUrl extends StatelessWidget {
         .cachedFromUrl(
       pdfUrl,
       placeholder: (double progress) => Center(child: Text('$progress %')),
-      errorWidget: (dynamic error) => Center(child: Text(error.toString())),
+      errorWidget: (dynamic error) =>
+          const Center(child: Text("PDF non disponible")),
     );
   }
 }

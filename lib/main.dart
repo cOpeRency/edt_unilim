@@ -1,10 +1,10 @@
-import 'package:edt_unilim/planning.dart';
-import 'package:edt_unilim/splash_screen.dart';
+import 'package:planorama/planning.dart';
+import 'package:planorama/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter/services.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:edt_unilim/log_mag.dart';
+import 'package:planorama/log_mag.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

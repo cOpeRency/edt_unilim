@@ -1,7 +1,7 @@
 library my_app.splash_screen;
 
 import 'dart:async';
-import 'package:edt_unilim/main.dart';
+import 'package:planorama/main.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
