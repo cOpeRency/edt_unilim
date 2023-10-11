@@ -115,7 +115,7 @@ class _PlanningState extends State<Planning> {
               child: AspectRatio(
                 aspectRatio: 12.5 / 8.8,
                 child: PageView.builder(
-                  itemCount: getWeekNumber(DateTime.now()) - 36,
+                  itemCount: getWeekNumber(DateTime.now()) - 35,
                   controller: PageController(initialPage: currentIndex),
                   onPageChanged: (index) {
                     setState(() {
