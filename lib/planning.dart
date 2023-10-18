@@ -4,6 +4,7 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:gesture_zoom_box/gesture_zoom_box.dart';
+import 'package:http/http.dart' as http;
 
 class Planning extends StatefulWidget {
   const Planning({Key? key}) : super(key: key);
@@ -126,11 +127,22 @@ class _PlanningState extends State<Planning> {
                     return FutureBuilder<Widget>(
                       future: getPdf(index, currentYear),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
+                        print(snapshot.connectionState);
+                        print(snapshot.hasData);
+                        print(snapshot.data);
+                        print(snapshot.error);
+                        print(index);
+                        if (snapshot.connectionState == ConnectionState.done &&
+                            snapshot.hasData) {
                           return snapshot.data ?? Container();
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
                         } else {
                           return const Center(
-                            child: Text("PDF non disponible"),
+                            child: Text("Erreur de chargement du PDF"),
                           );
                         }
                       },
@@ -146,31 +158,34 @@ class _PlanningState extends State<Planning> {
   }
 }
 
-class PDFViewerFromUrl extends StatelessWidget {
-  const PDFViewerFromUrl({Key? key, required this.pdfUrl}) : super(key: key);
-
-  final String pdfUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    return const PDF(
-            enableSwipe: true, swipeHorizontal: true, fitPolicy: FitPolicy.BOTH)
-        .cachedFromUrl(
-      pdfUrl,
-      placeholder: (double progress) => Center(child: Text('$progress %')),
-      errorWidget: (dynamic error) =>
-          const Center(child: Text("PDF non disponible")),
-    );
-  }
-}
-
 Future<Widget> getPdf(index, currentYear) async {
-  return Center(
-    child: PDFViewerFromUrl(
-      pdfUrl:
-          'http://edt-iut-info.unilim.fr/edt/A$currentYear/A${currentYear}_S${index + 1}.pdf',
-    ),
-  );
+  final pdfUrl =
+      'http://edt-iut-info.unilim.fr/edt/A$currentYear/A${currentYear}_S${index + 1}.pdf';
+
+  try {
+    // Vérifiez si l'URL est valide en effectuant une requête HTTP HEAD.
+    final headResponse = await http.head(Uri.parse(pdfUrl));
+
+    if (headResponse.statusCode == 200 &&
+        headResponse.headers['content-type'] == 'application/pdf') {
+      return Center(
+        child: const PDF(
+          enableSwipe: true,
+          swipeHorizontal: true,
+          fitPolicy: FitPolicy.BOTH,
+        ).cachedFromUrl(
+          pdfUrl,
+          placeholder: (double progress) => Center(child: Text('$progress %')),
+          errorWidget: (dynamic error) =>
+              const Center(child: Text("PDF non disponible")),
+        ),
+      );
+    } else {
+      return const Center(child: Text("Le PDF n'est pas disponible"));
+    }
+  } catch (e) {
+    return Center(child: Text("Erreur de chargement du PDF : $e"));
+  }
 }
 
 getWeekNumber(DateTime date) {
