@@ -127,11 +127,6 @@ class _PlanningState extends State<Planning> {
                     return FutureBuilder<Widget>(
                       future: getPdf(index, currentYear),
                       builder: (context, snapshot) {
-                        print(snapshot.connectionState);
-                        print(snapshot.hasData);
-                        print(snapshot.data);
-                        print(snapshot.error);
-                        print(index);
                         if (snapshot.connectionState == ConnectionState.done &&
                             snapshot.hasData) {
                           return snapshot.data ?? Container();
