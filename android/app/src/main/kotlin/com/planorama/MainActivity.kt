@@ -1,4 +1,4 @@
-package com.planorama.package.name
+package com.planorama
 
 import io.flutter.embedding.android.FlutterActivity
 
