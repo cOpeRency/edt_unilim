@@ -42,7 +42,7 @@ class PDFViewerFromAsset extends StatelessWidget {
                                 style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w700,
-                                    color: Color.fromARGB(255, 80, 121, 196))),
+                                    color: Color.fromARGB(255, 255, 255, 255))),
                           ),
                         );
                       }
