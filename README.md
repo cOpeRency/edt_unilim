@@ -7,13 +7,19 @@ L'application permet également de visionner le dernier numéro du journal étud
 
 Visionneuse de planning :
 
-<img src="https://github.com/coperency/edt_unilim/blob/dev/readme_images/screens/planning1.png" width="350">
-<img src="https://github.com/coperency/edt_unilim/blob/dev/readme_images/screens/planning2.png" width="350">
+
+<div style="display: flex; justify-content: space-between;">
+    <img src="https://github.com/coperency/edt_unilim/blob/dev/readme_images/screens/planning1.png" width="400">
+    <img src="https://github.com/coperency/edt_unilim/blob/dev/readme_images/screens/planning2.png" width="400">
+</div>
 
 Visionneuse du Log_Mag :
 
-<img src="https://github.com/coperency/edt_unilim/blob/dev/readme_images/screens/mag1.png" width="350">
-<img src="https://github.com/coperency/edt_unilim/blob/dev/readme_images/screens/mag2.png" width="350">
+<div style="display: flex; justify-content: space-between;">
+    <img src="https://github.com/coperency/edt_unilim/blob/dev/readme_images/screens/mag1.png" width="400">
+    <img src="https://github.com/coperency/edt_unilim/blob/dev/readme_images/screens/mag2.png" width="400">
+</div>
+
 
 ## À savoir
 
