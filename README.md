@@ -1,7 +1,13 @@
 # edt_unilim
 
-Planorama est une application permettant de visionner facilement les emplois du temps des élèves de BUT Informatique.
+# Contexte
+
+Cette application mobile est en cours de développement. Elle est issue d'un projet collaboratif lancé par un serious game en cours de Communication.
+
+Planorama est une application mobile permettant de visionner facilement les emplois du temps des élèves de BUT Informatique.
 L'application permet également de visionner le dernier numéro du journal étudiant, le Log_Mag.
+
+Vous pouvez passer du mode clair au mode sombre quand vous voulez, et vice-versa.
 
 ## Aperçu de l'application
 
@@ -23,4 +29,3 @@ Visionneuse du Log_Mag :
 
 ## À savoir
 
-Cette application mobile est en cours de développement. Elle est issue d'un projet collaboratif lancé par un serious game en cours de Communication.
