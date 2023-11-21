@@ -1,16 +1,20 @@
 # edt_unilim
 
-A new Flutter project.
+Planorama est une application permettant de visionner facilement les emplois du temps des élèves de BUT Informatique.
+L'application permet également de visionner le dernier numéro du journal étudiant, le Log_Mag.
 
-## Getting Started
+## Aperçu de l'application
 
-This project is a starting point for a Flutter application.
+Visionneuse de planning :
 
-A few resources to get you started if this is your first Flutter project:
+![alt text](https://github.com/coperency/edt_unilim/blob/main/readme_images/screens/planning1.png?raw=true)
+![alt text](https://github.com/coperency/edt_unilim/blob/main/readme_images/screens/planning2.png?raw=true)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Visionneuse du Log_Mag :
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![alt text](https://github.com/coperency/edt_unilim/blob/main/readme_images/screens/mag1.png?raw=true)
+![alt text](https://github.com/coperency/edt_unilim/blob/main/readme_images/screens/mag2.png?raw=true)
+
+## À savoir
+
+Cette apllication mobile est en cours de développement. Elle est issue d'un projet collaboratif lancé par un serious game en cours de Communication.
