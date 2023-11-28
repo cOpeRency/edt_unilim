@@ -1,4 +1,4 @@
-# edt_unilim
+# PLANORAMA
 
 # Contexte
 
@@ -26,6 +26,19 @@ Visionneuse du Log_Mag :
     <img src="https://github.com/coperency/edt_unilim/blob/dev/readme_images/screens/mag2.png" width="400">
 </div>
 
+# Compétences développées :
 
-## À savoir
+## Réaliser un développement d'application
+- Nous avons travaillé à plusieurs sur l'application.
+- Nous avons fait en sorte de réaliser un produit convivial et pertinent.
+
+## Conduite d'un projet
+- Nous avons lancé ce projet afin de répondre aux besoins des étudiants du BUT Informatique, en l'occurrence le besoin d'avoir un moyen facile pour visionner les emplois du temps rapidement, ainsi que le journal du Log_Mag.
+- Nous avons fait en sorte de maintenir le projet opérationnel et de fournir au fur et à mesure une démo fonctionnelle afin de la faire tester aux futurs utilisateurs.
+- Ce projet est voué à évoluer et à être repris et modifié selon les besoins changeants des étudiants. C'est un projet collaboratif.
+
+## Intégration dans une équipe informatique
+- Nous avons décidé en cours de route de réaliser la nouvelle fonctionnalité qui est de pouvoir visionner le Log_Mag.
+- Nous avons réparti nos tâches avant chaque session et organisé des réunions afin de gérer les différents cas de crises (simulés car cela reste un serious game).
+- Nous faisions des points réguliers afin de suivre l'avancée de tout le monde, et la transmission d'information était efficace dans une équipe de taille moyenne (10 personnes).
 
